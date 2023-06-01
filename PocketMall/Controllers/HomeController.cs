@@ -15,7 +15,16 @@ namespace PocketMall.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.Request.Cookies.ContainsKey("signUpDate"))
+            {
+                object data = HttpContext.Request.Cookies["signUpDate"];
+                return View(data);
+            }
+            else
+            {
+                HttpContext.Response.Cookies.Append("signUpDate", DateTime.Now.ToString());
+                return View();
+            }
         }
 
         public IActionResult Privacy()

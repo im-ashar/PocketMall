@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PocketMall</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PocketMall.styles.css" asp-append-version="true" />
@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
             <div class="container">
-                <a class="navbar-brand d-inline-flex" href="index.html"><img class="d-inline-block" src="~/imagesHome/gallery/logo.png" alt="logo" /><span class="text-1000 fs-0 fw-bold ms-2">PocketMall</span></a>
+                <a class="navbar-brand d-inline-flex" href="/Home/Index"><img class="d-inline-block" src="~/imagesHome/gallery/logo.png" alt="logo" /><span class="text-1000 fs-0 fw-bold ms-2">PocketMall</span></a>
                 <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -116,12 +116,12 @@
             <div class="border-bottom border-3"></div>
             <div class="row flex-center my-3">
                 <div class="col-md-6 order-1 order-md-0">
-                    <p class="my-2 text-1000 text-center text-md-start">
-                        Made with&nbsp;
-                        <svg class="bi bi-suit-heart-fill" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#EB6453" viewBox="0 0 16 16">
-                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>
-                        </svg>&nbsp;by&nbsp;<a class="text-800" href="https://themewagon.com/" target="_blank">ThemeWagon </a>
-                    </p>
+                    @if (!string.IsNullOrEmpty(Model))
+                    {
+                        <p class="my-2 text-1000 text-center text-md-start">
+                            You Singup On @Model
+                        </p>
+                    }
                 </div>
                 <div class="col-md-6">
                     <div class="text-center text-md-end"><a href="#!"><span class="me-4" data-feather="facebook"></span></a><a href="#!"> <span class="me-4" data-feather="instagram"></span></a><a href="#!"> <span class="me-4" data-feather="youtube"></span></a><a href="#!"> <span class="me-4" data-feather="twitter"></span></a></div>
@@ -130,10 +130,11 @@
         </div>
         <!-- end of .container-->
 
+
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/is.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
@@ -142,5 +143,8 @@
         feather.replace();
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    @await Html.PartialAsync("ContactUs")
+
 </body>
 </html>
