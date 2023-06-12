@@ -6,10 +6,11 @@ namespace PocketMall.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountsRepository _repo;
-        public AccountController(IAccountsRepository repo)
+        private readonly IAppRepository<UserModel> _userRepo;
+        public AccountController(IAppRepository<UserModel> userRepo)
         {
-            _repo = repo;
+            _userRepo = userRepo;
+            
         }
         public IActionResult Signup()
         {
@@ -18,9 +19,10 @@ namespace PocketMall.Controllers
         [HttpPost]
         public async Task<IActionResult> Signup(UserModel model)
         {
-            if (await _repo.StoreUserToDb(model))
+            model.Id=Guid.NewGuid();
+            if (await _userRepo.AddAsync(model)!=null)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Signin");
             }
             return View();
         }
@@ -32,9 +34,9 @@ namespace PocketMall.Controllers
         [HttpPost]
         public async Task<IActionResult> Signin(UserModel model)
         {
-            if(await _repo.AuthorizeUserFromDb(model))
+            if(await _userRepo.AuthorizeUserFromDb(model))
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("GetAllProducts","Product");
             }
             return View();
         }

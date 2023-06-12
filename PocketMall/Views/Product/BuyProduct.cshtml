@@ -1,0 +1,19 @@
+﻿@model OrderModel
+
+<div class="container">
+    <div class="border-bottom border-2 border-dark d-inline-block">
+        <h1>Place Order</h1>
+    </div>
+    <form class="w-50 mt-2 shadow p-2" asp-action="PlaceOrder" asp-controller="Order">
+        <div class="mb-3">
+            <label asp-for="CustomerName" class="form-label">Cutomer Name</label>
+            <input asp-for="CustomerName" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label asp-for="CustomerAddress" class="form-label">Customer Address</label>
+            <input asp-for="CustomerAddress" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-success">Place Order</button>
+    </form>
+</div>

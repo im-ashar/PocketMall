@@ -17,8 +17,8 @@ namespace PocketMall.Controllers
         {
             if (HttpContext.Request.Cookies.ContainsKey("signUpDate"))
             {
-                object data = HttpContext.Request.Cookies["signUpDate"];
-                return View(data);
+                ViewBag.Cookie = HttpContext.Request.Cookies["signUpDate"];
+                return View();
             }
             else
             {
