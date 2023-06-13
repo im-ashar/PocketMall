@@ -1,10 +1,10 @@
-﻿@model List<ProductModel>
+﻿@model List<Product>
 
 <div class="d-flex flex-wrap justify-content-center ">
     @foreach (var product in Model)
     {
         var extension = System.IO.Path.GetExtension(product.ImageUrl);
-        var path = $"/productImages/{product.Id + extension}";
+        var path = $"/productImages/{product.ProductId + extension}";
         <div class="card m-2 shadow" style="width: 18rem;">
             <div class="imageContainer">
                 <img src="@path" class="card-img-top" alt="...">
@@ -15,8 +15,10 @@
                     <h5 class="card-title">@product.Price PKR</h5>
                 </div>
                 <p class="card-text">@product.Description</p>
-                <a asp-action="BuyProduct" asp-route-productId="@product.Id" class="btn btn-primary">Buy Now</a>
+                <a asp-action="BuyProduct" asp-route-productId="@product.ProductId" class="btn btn-primary">Buy Now</a>
             </div>
+            @await Component.InvokeAsync("ProductDetails")
         </div>
+
     }
 </div>

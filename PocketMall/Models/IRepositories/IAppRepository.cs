@@ -4,7 +4,7 @@ namespace PocketMall.Models.IRepositories
 {
     public interface IAppRepository<T> where T : class
     {
-        Task<bool> AuthorizeUserFromDb(UserModel model);
+        Task<bool> AuthorizeUserFromDb(User model);
 
         Task<T> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();

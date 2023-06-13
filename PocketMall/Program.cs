@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PocketMall.Models;
 using PocketMall.Models.IRepositories;
 using PocketMall.Models.Repositories;
+using PocketMall.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +14,10 @@ options.UseSqlServer(connString, sql => sql.MigrationsAssembly(migrationAssembly
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+builder.Services.AddSignalR();
 
 var app = builder.Build();
-var scope=app.Services.CreateScope();
+var scope = app.Services.CreateScope();
 
 scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync().Wait();
 // Configure the HTTP request pipeline.
@@ -37,4 +39,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Signin}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<SignalRConnection>("/connection");
+});
 app.Run();

@@ -10,15 +10,14 @@ namespace PocketMall.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<OrderModel>()
-                .HasMany(x => x.Products)
-                .WithMany(x => x.Orders)
-                .UsingEntity(x => x.ToTable("OrderModelProductModel"));
+            
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<OrderProduct>().HasKey(i => new { i.OrderId, i.ProductId });
         }
 
-        public DbSet<OrderModel> Orders { get; set; }
-        public DbSet<ProductModel> Products { get; set; }
-        public DbSet<UserModel> Users { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<OrderProduct> OrderProduct { get; set; }
     }
 }

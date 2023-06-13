@@ -6,8 +6,8 @@ namespace PocketMall.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAppRepository<UserModel> _userRepo;
-        public AccountController(IAppRepository<UserModel> userRepo)
+        private readonly IAppRepository<User> _userRepo;
+        public AccountController(IAppRepository<User> userRepo)
         {
             _userRepo = userRepo;
             
@@ -17,9 +17,9 @@ namespace PocketMall.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Signup(UserModel model)
+        public async Task<IActionResult> Signup(User model)
         {
-            model.Id=Guid.NewGuid();
+            model.UserId=Guid.NewGuid();
             if (await _userRepo.AddAsync(model)!=null)
             {
                 return RedirectToAction("Signin");
@@ -32,7 +32,7 @@ namespace PocketMall.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Signin(UserModel model)
+        public async Task<IActionResult> Signin(User model)
         {
             if(await _userRepo.AuthorizeUserFromDb(model))
             {

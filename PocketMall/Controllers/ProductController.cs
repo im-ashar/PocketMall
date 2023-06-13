@@ -7,25 +7,25 @@ namespace PocketMall.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IAppRepository<ProductModel> _productRepo;
+        private readonly IAppRepository<Product> _productRepo;
 
-        public ProductController(IAppRepository<ProductModel> productRepo)
+        public ProductController(IAppRepository<Product> productRepo)
         {
             _productRepo = productRepo;
         }
 
         public IActionResult AddProduct()
         {
-            var product = new ProductModel { AllCategories = new List<string> { "Men", "Women", "Kids" } };
+            var product = new Product { AllCategories = new List<string> { "Men", "Women", "Kids" } };
             ViewBag.ProductAdded = TempData["ProductAdded"];
             return View(product);
         }
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ProductModel model)
+        public async Task<IActionResult> AddProduct(Product model)
         {
-            model.Id = Guid.NewGuid();
+            model.ProductId = Guid.NewGuid();
             var extension = Path.GetExtension(model.Image.FileName);
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", model.Id + extension);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", model.ProductId + extension);
             model.ImageUrl = path;
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -48,10 +48,10 @@ namespace PocketMall.Controllers
             foreach (var image in images)
             {
 
-                var model = new ProductModel();
-                model.Id = Guid.NewGuid();
+                var model = new Product();
+                model.ProductId = Guid.NewGuid();
                 var extension = Path.GetExtension(image.FileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", model.Id + extension);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", model.ProductId + extension);
                 model.Name = Path.GetFileNameWithoutExtension(image.FileName);
                 model.Price = "78";
                 model.Description = "Description of " + image.FileName;
@@ -69,14 +69,16 @@ namespace PocketMall.Controllers
 
         public async Task<IActionResult> BuyProduct(Guid productId)
         {
-            var product = await _productRepo.GetByIdAsync(productId);
-            OrderModel order = new OrderModel();
-            order.CustomerName = "Ali";
-            order.CustomerAddress = "Lahore";
-            order.Products.Add(product);
-            product.Orders = new List<OrderModel> { order };
+            TempData["ProductId"] = productId;
+            //Product product = await _productRepo.GetByIdAsync(productId);
+            //Order order = new Order();
+            //order.CustomerName = "Ali";
+            //order.CustomerAddress = "Lahore";
+            //order.Products=new List<Product>();
+            //order.Products.Add(product);
+            //product.Orders = new List<Order> { order };
             //await _productRepo.AddAsync(product);
-            return  RedirectToAction("PlaceOrder","Order",order);
+            return View();
         }
 
 

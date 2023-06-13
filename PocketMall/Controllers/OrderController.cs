@@ -1,22 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PocketMall.Models.IRepositories;
 using PocketMall.Models;
+using Microsoft.AspNetCore.SignalR;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using PocketMall.SignalR;
 
 namespace PocketMall.Controllers
 {
     public class OrderController : Controller
     {
 
-        private readonly IAppRepository<OrderModel> _orderRepo;
+        private readonly IAppRepository<Order> _orderRepo;
+        private readonly IAppRepository<Product> _productRepo;
+        private readonly IAppRepository<OrderProduct> _orderProductRepo;
+        private readonly IHubContext<SignalRConnection> _hubContext;
 
-        public OrderController(IAppRepository<OrderModel> orderRepo)
+
+
+        public OrderController(IAppRepository<Order> orderRepo, IAppRepository<Product> productRepo, IAppRepository<OrderProduct> orderProductRepo, IHubContext<SignalRConnection> hubContext)
         {
+            _productRepo = productRepo;
             _orderRepo = orderRepo;
+            _orderProductRepo = orderProductRepo;
+            _hubContext = hubContext;
         }
 
-        public async Task<IActionResult> PlaceOrder(OrderModel orderModel)
+        public async Task<IActionResult> PlaceOrder(Order orderModel)
         {
+            var tempProductId = TempData["ProductId"];
+            var productId = (Guid)tempProductId;
+            orderModel.OrderId = Guid.NewGuid();
             await _orderRepo.AddAsync(orderModel);
+            var productModel = await _productRepo.GetByIdAsync(productId);
+            //Now add to OrderProduct Table
+            var orderProduct = new OrderProduct { Order = orderModel, Product = productModel };
+            await _orderProductRepo.AddAsync(orderProduct);
+            await _hubContext.Clients.All.SendAsync("OrderPlaced", $"Order Id " + orderModel.OrderId + " Has Been Placed");
+            Thread.Sleep(2000);
             return RedirectToAction("GetAllProducts", "Product");
         }
     }

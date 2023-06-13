@@ -13,7 +13,7 @@ namespace PocketMall.Models.Repositories
         }
 
 
-        public async Task<bool> AuthorizeUserFromDb(UserModel model)
+        public async Task<bool> AuthorizeUserFromDb(User model)
         {
             var result = await _context.Users.Where(x => x.Email == model.Email && x.Password == model.Password).FirstOrDefaultAsync();
             if (result != null)
