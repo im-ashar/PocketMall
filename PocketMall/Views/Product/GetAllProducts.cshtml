@@ -1,5 +1,8 @@
 ﻿@model List<Product>
+@{
+    ViewData["Title"] = "All Products";
 
+}
 <div class="d-flex flex-wrap justify-content-center ">
     @foreach (var product in Model)
     {
@@ -15,9 +18,8 @@
                     <h5 class="card-title">@product.Price PKR</h5>
                 </div>
                 <p class="card-text">@product.Description</p>
-                <a asp-action="BuyProduct" asp-route-productId="@product.ProductId" class="btn btn-primary">Buy Now</a>
+                <a asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary">View Details</a>
             </div>
-            @await Component.InvokeAsync("ProductDetails")
         </div>
 
     }

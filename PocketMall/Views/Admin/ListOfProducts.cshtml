@@ -1,0 +1,36 @@
+﻿@model List<Product>
+
+<div class="container">
+    <table class="table shadow-lg border border-2 rounded rounded-4 overflow-hidden">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Category</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <th scope="row">@product.ProductId</th>
+                    <td>@product.Name</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.Price</td>
+                    <td>@product.Category</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="ReceiveProductId" asp-route-productId="@product.ProductId">
+                            Update
+                        </a>
+                        <a class="btn btn-danger" asp-action="DeleteProduct" asp-route-productId="@product.ProductId">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

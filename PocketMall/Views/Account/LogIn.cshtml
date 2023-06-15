@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "_AccountLayout.cshtml";
+    ViewData["Title"] = "LogIn";
+}
+@model LogIn
+<section class="sign-in">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="~/images/signin-image.jpg" alt="sign up image"></figure>
+                <a href="~/Account/SignUp" class="signup-image-link">Create an account</a>
+            </div>
+            <div class="signin-form">
+                <h2 class="form-title">LogIn</h2>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <form method="POST" action="/Account/LogIn" class="register-form" id="login-form">
+                    <div class="form-group">
+                        <label asp-for="UserNameOrEmail"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input asp-for="UserNameOrEmail" placeholder="Your UserName Or Email" />
+                        <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"><i class="zmdi zmdi-lock"></i></label>
+                        <input asp-for="Password" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-button">
+                        <button type="submit" class="form-submit">LogIn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

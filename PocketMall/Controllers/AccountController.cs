@@ -10,35 +10,54 @@ namespace PocketMall.Controllers
         public AccountController(IAppRepository<User> userRepo)
         {
             _userRepo = userRepo;
-            
+
         }
         public IActionResult Signup()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Signup(User model)
+        public async Task<IActionResult> SignUp(SignUp model)
         {
-            model.UserId=Guid.NewGuid();
-            if (await _userRepo.AddAsync(model)!=null)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Signin");
+                var signUpResult = await _userRepo.SignUpUser(model);
+                if (signUpResult.Succeeded)
+                {
+                    return RedirectToAction("LogIn");
+                }
+                foreach (var error in signUpResult.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
+
             return View();
         }
-        public IActionResult Signin()
+        public IActionResult LogIn()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Signin(User model)
+        public async Task<IActionResult> LogIn(LogIn model)
         {
-            if(await _userRepo.AuthorizeUserFromDb(model))
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("GetAllProducts","Product");
+                var logInResult = await _userRepo.LogInUser(model);
+                if (logInResult.Succeeded)
+                {
+                    return RedirectToAction("GetAllProducts", "Product");
+                }
+                ModelState.AddModelError(string.Empty, "Invalid Username or Password");
             }
             return View();
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await _userRepo.LogOutUser();
+            return RedirectToAction("GetAllProducts", "Product");
         }
     }
 }

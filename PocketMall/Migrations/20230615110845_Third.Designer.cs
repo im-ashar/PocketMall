@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PocketMall.Models;
 
@@ -11,9 +12,11 @@ using PocketMall.Models;
 namespace PocketMall.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230615110845_Third")]
+    partial class Third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,12 +218,29 @@ namespace PocketMall.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("PocketMall.Models.Quantity", b =>
+                {
+                    b.Property<Guid>("QuantityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("QuantityOfProduct")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuantityId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Quantity");
                 });
 
             modelBuilder.Entity("PocketMall.Models.User", b =>
@@ -362,6 +382,17 @@ namespace PocketMall.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("PocketMall.Models.Quantity", b =>
+                {
+                    b.HasOne("PocketMall.Models.Product", "Product")
+                        .WithOne("Quantity")
+                        .HasForeignKey("PocketMall.Models.Quantity", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("PocketMall.Models.Order", b =>
                 {
                     b.Navigation("Products");
@@ -370,6 +401,8 @@ namespace PocketMall.Migrations
             modelBuilder.Entity("PocketMall.Models.Product", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Quantity");
                 });
 #pragma warning restore 612, 618
         }
