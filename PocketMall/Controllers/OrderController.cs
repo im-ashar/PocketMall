@@ -10,14 +10,14 @@ namespace PocketMall.Controllers
     public class OrderController : Controller
     {
 
-        private readonly IAppRepository<Order> _orderRepo;
-        private readonly IAppRepository<Product> _productRepo;
-        private readonly IAppRepository<OrderProduct> _orderProductRepo;
+        private readonly IAppGenericRepository<Order> _orderRepo;
+        private readonly IAppGenericRepository<Product> _productRepo;
+        private readonly IAppGenericRepository<OrderProduct> _orderProductRepo;
         private readonly IHubContext<SignalRConnection> _hubContext;
 
 
 
-        public OrderController(IAppRepository<Order> orderRepo, IAppRepository<Product> productRepo, IAppRepository<OrderProduct> orderProductRepo, IHubContext<SignalRConnection> hubContext)
+        public OrderController(IAppGenericRepository<Order> orderRepo, IAppGenericRepository<Product> productRepo, IAppGenericRepository<OrderProduct> orderProductRepo, IHubContext<SignalRConnection> hubContext)
         {
             _productRepo = productRepo;
             _orderRepo = orderRepo;

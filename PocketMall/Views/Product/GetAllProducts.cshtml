@@ -19,6 +19,10 @@
                 </div>
                 <p class="card-text">@product.Description</p>
                 <a asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary">View Details</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="ReceiveProductId" asp-controller="Admin" asp-route-productId="@product.ProductId" class="btn btn-warning">Edit</a>
+                }
             </div>
         </div>
 

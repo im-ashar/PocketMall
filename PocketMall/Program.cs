@@ -16,7 +16,8 @@ options.UseSqlServer(connString, sql => sql.MigrationsAssembly(migrationAssembly
 
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+builder.Services.AddScoped(typeof(IAppGenericRepository<>), typeof(AppGenericRepository<>));
+builder.Services.AddScoped<IAppNonGenericRepository, AppNonGenericRepository>();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -79,7 +80,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=SignUp}/{id?}");
+    pattern: "{controller=Account}/{action=LogIn}/{id?}");
 
 app.UseEndpoints(endpoints =>
 

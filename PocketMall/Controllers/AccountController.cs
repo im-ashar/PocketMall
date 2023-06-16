@@ -6,8 +6,8 @@ namespace PocketMall.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAppRepository<User> _userRepo;
-        public AccountController(IAppRepository<User> userRepo)
+        private readonly IAppNonGenericRepository _userRepo;
+        public AccountController(IAppNonGenericRepository userRepo)
         {
             _userRepo = userRepo;
 

@@ -8,9 +8,9 @@ namespace PocketMall.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly IAppRepository<Product> _productRepo;
+        private readonly IAppGenericRepository<Product> _productRepo;
 
-        public AdminController(IAppRepository<Product> productRepo)
+        public AdminController(IAppGenericRepository<Product> productRepo)
         {
             _productRepo = productRepo;
         }

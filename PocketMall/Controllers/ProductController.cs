@@ -7,9 +7,9 @@ namespace PocketMall.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IAppRepository<Product> _productRepo;
+        private readonly IAppGenericRepository<Product> _productRepo;
 
-        public ProductController(IAppRepository<Product> productRepo)
+        public ProductController(IAppGenericRepository<Product> productRepo)
         {
             _productRepo = productRepo;
         }
@@ -40,5 +40,11 @@ namespace PocketMall.Controllers
             var product = await _productRepo.GetByIdAsync(productId);
             return View(product);
         }
+
+        /*public async Task<IActionResult> AddToCart(Guid productId)
+        {
+            if(HttpContext.)
+            HttpContext.Session.SetString("", "");
+        }*/
     }
 }

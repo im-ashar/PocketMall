@@ -35,3 +35,5 @@ function showNotification(order) {
     };
 }
 
+//For Searching Category
+$('.selectpicker').selectpicker();

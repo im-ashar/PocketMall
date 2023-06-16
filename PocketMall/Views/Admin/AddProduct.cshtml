@@ -12,7 +12,7 @@
         <h5 class="text-success">Product Added Successfully</h5>
     }
     <div asp-validation-summary="All" class="text-danger"></div>
-    <form class="w-50 mt-2 shadow p-2" asp-action="AddProduct" asp-controller="Product" enctype="multipart/form-data">
+    <form class="w-50 mt-2 shadow p-2" asp-action="AddProduct" asp-controller="Admin" enctype="multipart/form-data">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Name</label>
             <input asp-for="Name" class="form-control">
@@ -35,13 +35,12 @@
         </div>
         <div class="mb-3">
             <label asp-for="Category" class="form-label">Category:</label>
-            <div>
+            <select class="selectpicker" asp-for="Category" data-live-search="true">
                 @foreach (var cat in Model.AllCategories)
                 {
-                    <input type="radio" asp-for="Category" value="@cat">
-                    <label asp-for="Category">@cat</label>
+                    <option value="@cat" data-tokens="@cat">@cat</option>
                 }
-            </div>
+            </select>
             <span asp-validation-for="Category" class="text-danger"></span>
         </div>
         <div class="mb-3">
@@ -61,3 +60,7 @@
     </div>
     <button type="submit" class="btn btn-success">Add All Products</button>
 </form>
+
+@section bootstrapselect{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+}
