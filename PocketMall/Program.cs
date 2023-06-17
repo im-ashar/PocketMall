@@ -20,7 +20,15 @@ builder.Services.AddScoped(typeof(IAppGenericRepository<>), typeof(AppGenericRep
 builder.Services.AddScoped<IAppNonGenericRepository, AppNonGenericRepository>();
 builder.Services.AddSignalR();
 
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(60));
+
 var app = builder.Build();
+//enable session
+app.UseSession();
+
 var scope = app.Services.CreateScope();
 
 scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync().Wait();

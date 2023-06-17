@@ -20,10 +20,4 @@
     <Folder Include="wwwroot\productImages\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\lib\awesome-notification\.github\FUNDING.yml" />
-    <None Include="wwwroot\lib\awesome-notification\.github\ISSUE_TEMPLATE\bug_report.md" />
-    <None Include="wwwroot\lib\awesome-notification\.github\ISSUE_TEMPLATE\feature_request.md" />
-  </ItemGroup>
-
 </Project>

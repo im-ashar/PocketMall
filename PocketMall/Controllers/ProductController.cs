@@ -30,21 +30,13 @@ namespace PocketMall.Controllers
                 return View(productList);
             }
         }
-        public IActionResult BuyProduct(Guid productId)
-        {
-            TempData["ProductId"] = productId;
-            return View();
-        }
+        
         public async Task<IActionResult> ProductDetails(Guid productId)
         {
             var product = await _productRepo.GetByIdAsync(productId);
             return View(product);
         }
 
-        /*public async Task<IActionResult> AddToCart(Guid productId)
-        {
-            if(HttpContext.)
-            HttpContext.Session.SetString("", "");
-        }*/
+        
     }
 }

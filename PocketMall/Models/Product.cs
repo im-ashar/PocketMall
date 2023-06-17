@@ -20,7 +20,7 @@ namespace PocketMall.Models
         [RegularExpression("([0-9]+)", ErrorMessage = "Quantity Should Be A Positive Number")]
         public int Quantity { get; set; }
         public string Category { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         [NotMapped]
         public List<string> AllCategories { get; set; }
@@ -31,6 +31,6 @@ namespace PocketMall.Models
         [NotMapped]
         public IFormFile? UpdateImage { get; set; }
 
-        public ICollection<OrderProduct> Orders { get; set; }
+        public ICollection<OrderProduct>? Orders { get; set; }
     }
 }

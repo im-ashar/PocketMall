@@ -3,16 +3,20 @@ using PocketMall.Models.IRepositories;
 using PocketMall.Models;
 using Microsoft.Extensions.FileProviders;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.SignalR;
+using PocketMall.SignalR;
 
 namespace PocketMall.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IAppGenericRepository<Product> _productRepo;
+        private readonly IHubContext<SignalRConnection> _hubContext;
 
-        public AdminController(IAppGenericRepository<Product> productRepo)
+        public AdminController(IAppGenericRepository<Product> productRepo, IHubContext<SignalRConnection> hubContext)
         {
             _productRepo = productRepo;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> ListOfProducts()
@@ -43,9 +47,11 @@ namespace PocketMall.Controllers
                 }
                 await _productRepo.AddAsync(model);
                 TempData["ProductAdded"] = "Added";
+                await _hubContext.Clients.All.SendAsync("ProductAdded", $"Product Id " + model.ProductId +" Has Been Added");
+                Thread.Sleep(5000);
                 return RedirectToAction("AddProduct");
             }
-            return View();
+            return View(model);
         }
 
         //For Multiple Files, Only For Development Purpose

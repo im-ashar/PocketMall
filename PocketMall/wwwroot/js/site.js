@@ -6,34 +6,17 @@ connection.start().then(() => { }).catch((error) => {
     console.error(error);
 });
 
-connection.on("OrderPlaced", (order) => {
-    console.log(order);
 
-    if (Notification.permission === "granted") {
-        showNotification(order);
-    } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then((permission) => {
-            if (permission === "granted") {
-                showNotification(order);
-            }
-        });
-    }
+var notifier = new AWN();
+connection.on("ProductAdded", (order) => {
+    console.log(order);
+    notifier.success(order)
 });
 
-function showNotification(order) {
-    const title = "New Order Placed";
-    const options = {
-        body: JSON.stringify(order),
-    };
-
-    // Create a new notification
-    const notification = new Notification(title, options);
-
-    // Optional: Handle click event on the notification
-    notification.onclick = () => {
-        // Do something when the user clicks the notification
-    };
-}
+connection.on("AddedToCart", (order) => {
+    console.log(order);
+    notifier.success(order)
+});
 
 //For Searching Category
 $('.selectpicker').selectpicker();
