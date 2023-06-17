@@ -7,6 +7,8 @@ using PocketMall.SignalR;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace PocketMall.Controllers
 {
@@ -48,7 +50,9 @@ namespace PocketMall.Controllers
             TempData["ProductId"] = productId;
             return View();
         }
+
         List<Product> OrderProductsList = new List<Product>();
+        [Authorize]
         public async Task<IActionResult> AddToCart(Guid productId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -77,6 +81,36 @@ namespace PocketMall.Controllers
                 Thread.Sleep(3000);
                 return RedirectToAction("GetAllProducts", "Product");
             }
+        }
+        public IActionResult ViewCart()
+        {
+            var sess = HttpContext.Session.Keys.Where(x => x == "OrderProductsList").FirstOrDefault();
+            if (sess != null)
+            {
+                OrderProductsList = JsonSerializer.Deserialize<List<Product>>(HttpContext.Session.GetString(sess));
+                return View(OrderProductsList);
+
+            }
+            return View();
+        }
+        public async Task<IActionResult> RemoveFromCart(Guid productId)
+        {
+            var sess = HttpContext.Session.Keys.Where(x => x == "OrderProductsList").FirstOrDefault();
+            if (sess != null)
+            {
+                OrderProductsList = JsonSerializer.Deserialize<List<Product>>(HttpContext.Session.GetString(sess));
+                foreach(var product in OrderProductsList.ToList())
+                {
+                    if(product.ProductId == productId)
+                    {
+                        OrderProductsList.Remove(product);
+                        break;
+                    }
+                }
+                var serealizeOrderProductsList = JsonSerializer.Serialize(OrderProductsList);
+                HttpContext.Session.SetString("OrderProductsList", serealizeOrderProductsList);
+            }
+            return RedirectToAction("ViewCart");
         }
     }
 }

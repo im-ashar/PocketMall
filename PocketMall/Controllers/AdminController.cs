@@ -5,9 +5,11 @@ using Microsoft.Extensions.FileProviders;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.SignalR;
 using PocketMall.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PocketMall.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAppGenericRepository<Product> _productRepo;
@@ -24,7 +26,6 @@ namespace PocketMall.Controllers
             var productList = await _productRepo.GetAllAsync();
             return View(productList);
         }
-
         public IActionResult AddProduct()
         {
             ViewBag.ProductAdded = TempData["ProductAdded"];
@@ -47,7 +48,7 @@ namespace PocketMall.Controllers
                 }
                 await _productRepo.AddAsync(model);
                 TempData["ProductAdded"] = "Added";
-                await _hubContext.Clients.All.SendAsync("ProductAdded", $"Product Id " + model.ProductId +" Has Been Added");
+                await _hubContext.Clients.All.SendAsync("ProductAdded", $"Product Id " + model.ProductId + " Has Been Added");
                 Thread.Sleep(5000);
                 return RedirectToAction("AddProduct");
             }
@@ -92,6 +93,7 @@ namespace PocketMall.Controllers
             var result = await _productRepo.GetByIdAsync(productId);
             return View(result);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdatedProductToDb(Product model)
         {
@@ -140,3 +142,4 @@ namespace PocketMall.Controllers
         }
     }
 }
+

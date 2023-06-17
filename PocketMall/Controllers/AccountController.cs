@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PocketMall.Models;
 using PocketMall.Models.IRepositories;
 
@@ -34,19 +35,26 @@ namespace PocketMall.Controllers
 
             return View();
         }
+        [HttpGet]
         public IActionResult LogIn()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogIn(LogIn model)
+        public async Task<IActionResult> LogIn(LogIn model, string returnUrl = null)
         {
+
             if (ModelState.IsValid)
             {
                 var logInResult = await _userRepo.LogInUser(model);
                 if (logInResult.Succeeded)
                 {
+                    HttpContext.Response.Cookies.Append("loginDate", DateTime.Now.ToString());
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                     return RedirectToAction("GetAllProducts", "Product");
                 }
                 ModelState.AddModelError(string.Empty, "Invalid Username or Password");
@@ -54,9 +62,14 @@ namespace PocketMall.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await _userRepo.LogOutUser();
+            return RedirectToAction("GetAllProducts", "Product");
+        }
+        public IActionResult AccessDenied()
+        {
             return RedirectToAction("GetAllProducts", "Product");
         }
     }

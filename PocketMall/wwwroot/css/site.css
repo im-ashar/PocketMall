@@ -12,6 +12,15 @@ body {
     line-height: 1.5;
     color: #424242;
 }
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
 
 .text-800 {
     color: #616161 !important;
@@ -37,3 +46,14 @@ body {
         width: 100%;
         height: 100%;
     }
+
+.viewCartImage{
+    height: 10rem;
+}
+    .viewCartImage > img {
+        object-fit: contain;
+        height: 100%;
+    }
+#viewCartTable{
+    vertical-align:middle;
+}
