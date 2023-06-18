@@ -57,3 +57,13 @@ main {
 #viewCartTable{
     vertical-align:middle;
 }
+
+#similarItems::-webkit-scrollbar {
+    width: 0px; /* hide scrollbar for Chrome, Safari, and Opera */
+    height: 0px;
+}
+
+#similarItems {
+    scrollbar-width: none; /* hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* hide scrollbar for Internet Explorer and Edge */
+}

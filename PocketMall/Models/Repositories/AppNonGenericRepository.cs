@@ -54,6 +54,18 @@ namespace PocketMall.Models.Repositories
             var result2 = await _signInManager.PasswordSignInAsync(model.UserNameOrEmail, model.Password, true, false);
             return result2;
         }
-
+        public async Task<List<Product>> GetSimilarProductsAsync(string category, Guid productId)
+        {
+            var result = await _context.Products.Where(x => x.Category == category).ToListAsync();
+            foreach (var product in result.ToList())
+            {
+                if (product.ProductId == productId)
+                {
+                    result.Remove(product);
+                    break;
+                }
+            }
+            return result;
+        }
     }
 }

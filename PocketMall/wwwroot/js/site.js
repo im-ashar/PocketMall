@@ -17,6 +17,3 @@ connection.on("AddedToCart", (order) => {
     console.log(order);
     notifier.success(order)
 });
-
-//For Searching Category
-$('.selectpicker').selectpicker();

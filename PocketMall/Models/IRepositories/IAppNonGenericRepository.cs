@@ -7,5 +7,6 @@ namespace PocketMall.Models.IRepositories
         Task<IdentityResult> SignUpUser(SignUp model);
         Task<SignInResult> LogInUser(LogIn model);
         Task LogOutUser();
+        Task<List<Product>> GetSimilarProductsAsync(string category,Guid productId);
     }
 }

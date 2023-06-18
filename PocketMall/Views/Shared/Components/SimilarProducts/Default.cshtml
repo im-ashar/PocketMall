@@ -1,0 +1,40 @@
+﻿@model List<Product>
+<section class="bg-light border-top py-4">
+    <div class="container z-1">
+        <h3>Similar Items</h3>
+
+        <div id="similarItems" class="border rounded-2 shadow d-flex overflow-scroll">
+            @if (Model.Count == 0 || Model == null)
+            {
+                <p>No Item Found</p>
+            }
+            else
+            {
+                @foreach (var product in Model)
+                {
+                    var extension = System.IO.Path.GetExtension(product.ImageUrl);
+                    var path = $"/productImages/{product.ProductId + extension}";
+                    <a asp-action="ProductDetails" asp-route-productId="@product.ProductId" asp-controller="Product" class="text-decoration-none">
+                        <div class="card m-3 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="me-3">
+                                        <img src="@path"
+                                             style="min-width: 96px; height: 96px"
+                                             class="img-md img-thumbnail shadow-sm" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="nav-link mb-1 text-nowrap">
+                                            @product.Name
+                                        </div>
+                                        <strong class="text-dark">@product.Price PKR</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</section>

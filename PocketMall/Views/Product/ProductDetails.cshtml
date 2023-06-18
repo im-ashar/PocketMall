@@ -58,28 +58,4 @@
 </section>
 <!-- content -->
 
-<section class="bg-light border-top py-4">
-    <div class="container">
-        <h3>Similar items</h3>
-        <div class="border rounded-2 shadow-0 d-flex flex-wrap justify-content-evenly">
-            <div class="card m-3 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <a href="#" class="me-3">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-                                 style="min-width: 96px; height: 96px"
-                                 class="img-md img-thumbnail shadow-sm" />
-                        </a>
-                        <div class="info">
-                            <a href="#" class="nav-link mb-1">
-                                Rucksack Backpack Large <br />
-                                Line Mounts
-                            </a>
-                            <strong class="text-dark"> $38.90</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<vc:similar-products category="@Model.Category" product-id="@Model.ProductId"></vc:similar-products>

@@ -66,6 +66,7 @@ namespace PocketMall.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _userRepo.LogOutUser();
+            HttpContext.Session.Remove("OrderProductsList");
             return RedirectToAction("GetAllProducts", "Product");
         }
         public IActionResult AccessDenied()
