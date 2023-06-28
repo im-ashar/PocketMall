@@ -7,7 +7,8 @@ namespace PocketMall.Models
         public Guid OrderId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
-
-        public ICollection<OrderProduct> Products { get; set; }
+        public string TotalPrice { get; set; }
+        public DateTime OrderDate { get; set; }
+        public virtual List<Product> Products { get; set; }
     }
 }

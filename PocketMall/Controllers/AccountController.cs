@@ -38,6 +38,11 @@ namespace PocketMall.Controllers
         [HttpGet]
         public IActionResult LogIn()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                HttpContext.Response.Cookies.Append($"loginDate{User.Identity.Name}", DateTime.Now.ToString(), new CookieOptions { Expires = DateTime.Now.AddYears(1) });
+                return RedirectToAction("GetAllProducts", "Product");
+            }
             return View();
         }
 
@@ -50,7 +55,7 @@ namespace PocketMall.Controllers
                 var logInResult = await _userRepo.LogInUser(model);
                 if (logInResult.Succeeded)
                 {
-                    HttpContext.Response.Cookies.Append("loginDate", DateTime.Now.ToString());
+                    HttpContext.Response.Cookies.Append($"loginDate{User.Identity.Name}", DateTime.Now.ToString(), new CookieOptions { Expires = DateTime.Now.AddYears(1) });
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
                         return LocalRedirect(returnUrl);

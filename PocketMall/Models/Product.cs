@@ -31,6 +31,7 @@ namespace PocketMall.Models
         [NotMapped]
         public IFormFile? UpdateImage { get; set; }
 
-        public ICollection<OrderProduct>? Orders { get; set; }
+        public virtual List<Order> Orders { get; set; }
+
     }
 }

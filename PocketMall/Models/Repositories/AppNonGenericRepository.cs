@@ -67,5 +67,15 @@ namespace PocketMall.Models.Repositories
             }
             return result;
         }
+        public async Task<List<Order>> GetAllOrdersAsync()
+        {
+            var result = await _context.Orders.Include("Products").ToListAsync();
+            return result;
+        }
+        public async Task<List<Order>> SortByOrderDate()
+        {
+            var result = await _context.Orders.Include("Products").OrderBy(x => x.OrderDate).ToListAsync();
+            return result;
+        }
     }
 }

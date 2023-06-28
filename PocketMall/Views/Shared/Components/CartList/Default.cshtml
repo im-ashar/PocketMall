@@ -1,0 +1,61 @@
+﻿@model List<Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section>
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="container text-center text-danger d-flex flex-column mt-3">
+            <h4>Kindly Add Some Products In Cart Then Come Here</h4>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <table class="table shadow-lg border border-2 rounded rounded-4 overflow-hidden text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="viewCartTable">
+                    @{
+                        var totalPrice = 0;
+                    }
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            @{
+                                int result = 0;
+                                int.TryParse(product.Price, out result);
+                                totalPrice = totalPrice + result;
+                                var extension = System.IO.Path.GetExtension(product.ImageUrl);
+                                var path = $"/productImages/{product.ProductId + extension}";
+                            }
+                            <td scope="row" class="viewCartImage"><img src="@path" /></td>
+                            <td>@product.Name</td>
+                            <td>@product.Price</td>
+                            <td>
+                                <a class="btn btn-danger" asp-action="RemoveFromCart" asp-route-productId="@product.ProductId">
+                                    Remove From Cart
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4" class="text-end pe-3 fw-bold">Total Price: @totalPrice</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="text-1000 text-decoration-none btn btn-danger float-end" asp-action="Checkout" asp-controller="Order">
+                <i class="fa-regular fa-credit-card"></i>
+                <span>
+                    <text>Checkout</text>
+                </span>
+            </a>
+        </div>
+    }
+</section>

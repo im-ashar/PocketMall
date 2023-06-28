@@ -44,11 +44,7 @@
                         @Model.Description
                     </p>
                     <hr />
-
-                    <a href="#" class="btn btn-warning shadow-0">
-                        <i class="fa-solid fa-cart-shopping"></i> Buy now
-                    </a>
-                    <a asp-action="AddToCart" asp-controller="Order" asp-route-productId="@Model.ProductId" class="btn btn-primary shadow-0">
+                    <a asp-action="AddToCart" asp-controller="Order" asp-route-productId="@Model.ProductId" class="btn btn-warning shadow-0">
                         <i class="me-1 fa fa-solid fa-cart-arrow-down"></i> Add to cart
                     </a>
                 </div>
@@ -59,3 +55,4 @@
 <!-- content -->
 
 <vc:similar-products category="@Model.Category" product-id="@Model.ProductId"></vc:similar-products>
+@* @await Component.InvokeAsync("SimilarProducts",new {category=Model.Category,productId=Model.ProductId}) *@

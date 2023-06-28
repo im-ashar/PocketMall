@@ -1,3 +1,5 @@
+
+
 html {
     position: relative;
     min-height: 100%;
@@ -12,6 +14,7 @@ body {
     line-height: 1.5;
     color: #424242;
 }
+
 body {
     display: flex;
     flex-direction: column;
@@ -47,15 +50,18 @@ main {
         height: 100%;
     }
 
-.viewCartImage{
+.viewCartImage {
     height: 10rem;
 }
+
     .viewCartImage > img {
         object-fit: contain;
         height: 100%;
+        width: 100%;
     }
-#viewCartTable{
-    vertical-align:middle;
+
+#viewCartTable {
+    vertical-align: middle;
 }
 
 #similarItems::-webkit-scrollbar {
@@ -66,4 +72,81 @@ main {
 #similarItems {
     scrollbar-width: none; /* hide scrollbar for Firefox */
     -ms-overflow-style: none; /* hide scrollbar for Internet Explorer and Edge */
+}
+
+.email {
+    background-image: url("../email.svg") !important;
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-left: 10%;
+}
+
+.password {
+    background-image: url("../password.svg");
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-left: 10%;
+}
+
+.name {
+    background-image: url("../name.svg");
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-left: 10%;
+}
+
+.username {
+    background-image: url("../username.svg");
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-left: 10%;
+}
+
+.phone-number {
+    background-image: url("../phone-number.svg");
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-left: 10%;
+}
+
+.create-account {
+    background-image: url("../create-account.svg");
+    background-position: 3%;
+    background-repeat: no-repeat;
+    background-size: 15%;
+    padding-left: 10%;
+}
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
+    background-color: #7D7ABC !important;
+}
+
+.login-button {
+    background-image: url("../login-button.svg");
+    background-position: 90%;
+    background-repeat: no-repeat;
+    background-size: 25%;
+    padding-right: 10%;
+    padding-left: 10px;
+}
+.login-button2 {
+    background-image: url("../login-button.svg");
+    background-position: 90%;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    padding-right: 55px;
+    padding-left: 25px;
+}
+.signup-button {
+    background-image: url("../create-account.svg");
+    background-position: 90%;
+    background-repeat: no-repeat;
+    background-size: 25%;
+    padding-right: 45px;
+    padding-left: 10px;
 }

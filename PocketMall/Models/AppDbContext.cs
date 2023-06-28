@@ -9,15 +9,7 @@ namespace PocketMall.Models
         {
             
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<OrderProduct>().HasKey(i => new { i.OrderId, i.ProductId });
-        }
-
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<OrderProduct> OrderProduct { get; set; }
     }
 }

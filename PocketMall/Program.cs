@@ -31,7 +31,7 @@ app.UseSession();
 
 var scope = app.Services.CreateScope();
 
-scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync().Wait();
+await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
 
 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 if (!await roleManager.RoleExistsAsync("Admin"))
@@ -90,8 +90,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=LogIn}/{id?}");
 
-app.UseEndpoints(endpoints =>
-
-    endpoints.MapHub<SignalRConnection>("/connection")
-);
+app.MapHub<SignalRConnection>("/connection");
 app.Run();

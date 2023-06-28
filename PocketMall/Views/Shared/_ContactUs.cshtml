@@ -1,0 +1,51 @@
+﻿@model ContactUs
+<section>
+    <button type="button"
+            class="btn btn-warning position-fixed bottom-0 end-0 m-3"
+            data-bs-toggle="modal"
+            data-bs-target="#contactUsModal">
+        <i class="fa-solid fa-envelope-open-text fa-lg me-2"></i>Contact Us
+    </button>
+
+    <!-- Modal -->
+    <div class="modal animate__fadeInBottomRight animate__animated"
+         id="contactUsModal"
+         tabindex="-1"
+         aria-labelledby="contactUsModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog position-absolute bottom-0 end-0 m-3">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="contactUsModalLabel">Contact Us</h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label border-bottom border-dark-subtle border-3">Name</label>
+                            <input asp-for="Name" class="form-control">
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label border-bottom border-dark-subtle border-3">Email</label>
+                            <input asp-for="Email" class="form-control" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Message" class="form-label border-bottom border-dark-subtle border-3">Message</label>
+                            <textarea rows="3" asp-for="Message" class="form-control"></textarea>
+                            <span class="text-danger" asp-validation-for="Message"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Send<i class="fa-solid fa-paper-plane mx-2"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

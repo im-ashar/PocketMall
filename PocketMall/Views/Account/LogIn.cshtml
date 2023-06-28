@@ -1,33 +1,56 @@
 ﻿@{
-    Layout = "_AccountLayout.cshtml";
     ViewData["Title"] = "LogIn";
 }
 @model LogIn
-<section class="sign-in pt-4">
-    <div class="container shadow-lg">
-        <div class="signin-content">
-            <div class="signin-image">
-                <figure><img src="~/images/signin-image.jpg" alt="sign up image"></figure>
-                <a href="~/Account/SignUp" class="signup-image-link">Create an account</a>
-            </div>
-            <div class="signin-form">
-                <h2 class="form-title">LogIn</h2>
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <form method="POST"class="register-form" id="login-form">
-                    <div class="form-group">
-                        <label asp-for="UserNameOrEmail"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input asp-for="UserNameOrEmail" placeholder="Your UserName Or Email" />
-                        <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+<section>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login</p>
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <form action="~/Account/LogIn" method="post" class="mx-1 mx-md-4">
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label asp-for="UserNameOrEmail" class="form-label fw-bold">User Name</label>
+                                            <span class="username d-block form-control">
+                                                <input asp-for="UserNameOrEmail" placeholder="Enter your Email or Username" class="form-control border-0" />
+                                            </span>
+                                            <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label asp-for="Password" class="form-label fw-bold">Password</label>
+                                            <span class="password d-block form-control">
+                                                <input asp-for="Password" placeholder="Enter your Password" class="form-control border-0 " />
+                                            </span>
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <button type="submit" class="btn btn-primary btn-lg shadow-sm login-button">Login</button>
+                                    </div>
+                                </form>
+                                <div class="text-center">
+                                    <a href="~/Account/SignUp" class="text-decoration-none text-light btn btn-secondary shadow-sm create-account">Create an Account</a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                <img src="~/signin-image.png" class="img-fluid" alt="Sample image">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Password"><i class="zmdi zmdi-lock"></i></label>
-                        <input asp-for="Password" placeholder="Password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group form-button">
-                        <button type="submit" class="form-submit">LogIn</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

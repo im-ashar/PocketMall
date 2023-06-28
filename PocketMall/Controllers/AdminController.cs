@@ -6,19 +6,22 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.SignalR;
 using PocketMall.SignalR;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace PocketMall.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+        private readonly IAppNonGenericRepository _nonGen;
         private readonly IAppGenericRepository<Product> _productRepo;
         private readonly IHubContext<SignalRConnection> _hubContext;
 
-        public AdminController(IAppGenericRepository<Product> productRepo, IHubContext<SignalRConnection> hubContext)
+        public AdminController(IAppGenericRepository<Product> productRepo, IHubContext<SignalRConnection> hubContext, IAppNonGenericRepository nonGen)
         {
             _productRepo = productRepo;
             _hubContext = hubContext;
+            _nonGen = nonGen;
         }
 
         public async Task<IActionResult> ListOfProducts()
@@ -37,6 +40,7 @@ namespace PocketMall.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 model.ProductId = Guid.NewGuid();
                 var extension = Path.GetExtension(model.Image.FileName);
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", model.ProductId + extension);
@@ -48,7 +52,7 @@ namespace PocketMall.Controllers
                 }
                 await _productRepo.AddAsync(model);
                 TempData["ProductAdded"] = "Added";
-                await _hubContext.Clients.All.SendAsync("ProductAdded", $"Product Id " + model.ProductId + " Has Been Added");
+                await _hubContext.Clients.User(userId).SendAsync("ProductAdded", $"Product Id " + model.ProductId + " Has Been Added");
                 Thread.Sleep(5000);
                 return RedirectToAction("AddProduct");
             }
@@ -74,7 +78,6 @@ namespace PocketMall.Controllers
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     image.CopyTo(stream);
-
                 }
                 await _productRepo.AddAsync(model);
             }
@@ -139,6 +142,16 @@ namespace PocketMall.Controllers
             var result = await _productRepo.GetByIdAsync(productId);
             await _productRepo.DeleteAsync(result);
             return RedirectToAction("ListOfProducts");
+        }
+        public async Task<IActionResult> ListOfOrders()
+        {
+            var listOfOrders = await _nonGen.GetAllOrdersAsync();
+            return View(listOfOrders);
+        }
+        public async Task<IActionResult> SortByOrderDate()
+        {
+            var sortedOrder = await _nonGen.SortByOrderDate();
+            return PartialView("ListOfOrdersSortedByDate", sortedOrder);
         }
     }
 }

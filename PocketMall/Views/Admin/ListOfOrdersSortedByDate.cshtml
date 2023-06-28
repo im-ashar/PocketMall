@@ -1,0 +1,49 @@
+﻿@model List<Order>
+<div class="accordion" id="pro">
+    <strong>Order No</strong>
+    <strong class="float-end">Order Date</strong>
+    @foreach (var order in Model)
+    {
+        var heading = "heading" + order.OrderId;
+        <div class="accordion-item">
+            <div class="accordion-header d-flex" id="@heading">
+                <button class="accordion-button me-2" type="button" data-bs-toggle="collapse" data-bs-target="#@order.OrderId" aria-expanded="false" aria-controls="@order.OrderId">
+                    @order.OrderId
+                </button>
+                <p class="m-auto text-center border border-dark border-1 rounded-2 me-2">@order.OrderDate</p>
+            </div>
+            <div id="@order.OrderId" class="accordion-collapse collapse " aria-labelledby="@heading" data-bs-parent="#pro">
+                <div class="accordion-body">
+                    <table class="table shadow-lg border border-2 rounded rounded-4 overflow-hidden text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Id</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="viewCartTable">
+                            @foreach (var product in order.Products)
+                            {
+                                <tr>
+                                    @{
+                                        var extension = System.IO.Path.GetExtension(product.ImageUrl);
+                                        var path = $"/productImages/{product.ProductId + extension}";
+                                    }
+                                    <td>@product.ProductId</td>
+                                    <td class="viewCartImage"><img src="@path" /></td>
+                                    <td>@product.Name</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="2"></td>
+                                <td><strong>Total Price: </strong>@order.TotalPrice</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

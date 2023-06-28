@@ -17,41 +17,45 @@ namespace PocketMall.Controllers
 
         private readonly IAppGenericRepository<Order> _orderRepo;
         private readonly IAppGenericRepository<Product> _productRepo;
-        private readonly IAppGenericRepository<OrderProduct> _orderProductRepo;
         private readonly IHubContext<SignalRConnection> _hubContext;
 
+        List<Product> OrderProductsList = new List<Product>();
 
 
-        public OrderController(IAppGenericRepository<Order> orderRepo, IAppGenericRepository<Product> productRepo, IAppGenericRepository<OrderProduct> orderProductRepo, IHubContext<SignalRConnection> hubContext)
+        public OrderController(IAppGenericRepository<Order> orderRepo, IAppGenericRepository<Product> productRepo, IHubContext<SignalRConnection> hubContext)
         {
             _productRepo = productRepo;
             _orderRepo = orderRepo;
-            _orderProductRepo = orderProductRepo;
             _hubContext = hubContext;
         }
 
         public async Task<IActionResult> PlaceOrder(Order orderModel)
         {
-            var tempProductId = TempData["ProductId"];
-            var productId = (Guid)tempProductId;
-            orderModel.OrderId = Guid.NewGuid();
-            await _orderRepo.AddAsync(orderModel);
-            var productModel = await _productRepo.GetByIdAsync(productId);
-            //Now add to OrderProduct Table
-            var orderProduct = new OrderProduct { Order = orderModel, Product = productModel };
-            await _orderProductRepo.AddAsync(orderProduct);
-            await _hubContext.Clients.All.SendAsync("OrderPlaced", $"Order Id " + orderModel.OrderId + " Has Been Placed");
-            Thread.Sleep(2000);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sess = HttpContext.Session.Keys.Where(x => x == "OrderProductsList").FirstOrDefault();
+            OrderProductsList = JsonSerializer.Deserialize<List<Product>>(HttpContext.Session.GetString(sess));
+            if (sess != null && OrderProductsList.Count != 0)
+            {
+                int totalPrice = 0;
+                orderModel.OrderId = Guid.NewGuid();
+                orderModel.Products = new List<Product>();
+                foreach (var product in OrderProductsList)
+                {
+                    totalPrice = totalPrice + int.Parse(product.Price);
+                    var x = await _productRepo.GetByIdAsync(product.ProductId);
+                    orderModel.Products.Add(x);
+                }
+                orderModel.TotalPrice = totalPrice.ToString();
+                orderModel.OrderDate = DateTime.Now;
+                await _orderRepo.AddAsync(orderModel);
+                HttpContext.Session.Remove(sess);
+                await _hubContext.Clients.Users(userId).SendAsync("OrderPlaced", $"Your Order Has Been Placed. Your Order No Is {orderModel.OrderId}.");
+                Thread.Sleep(2000);
+            }
             return RedirectToAction("GetAllProducts", "Product");
         }
 
-        public IActionResult BuyProduct(Guid productId)
-        {
-            TempData["ProductId"] = productId;
-            return View();
-        }
 
-        List<Product> OrderProductsList = new List<Product>();
         [Authorize]
         public async Task<IActionResult> AddToCart(Guid productId)
         {
@@ -66,7 +70,7 @@ namespace PocketMall.Controllers
                 OrderProductsList.Add(product);
                 var serealizeOrderProductsList = JsonSerializer.Serialize(OrderProductsList);
                 HttpContext.Session.SetString("OrderProductsList", serealizeOrderProductsList);
-                _hubContext.Clients.Users(userId).SendAsync("AddedToCart", $"{product.Name} Added To Cart");
+                await _hubContext.Clients.Users(userId).SendAsync("AddedToCart", $"{product.Name} Added To Cart");
                 Thread.Sleep(3000);
                 return RedirectToAction("GetAllProducts", "Product");
             }
@@ -77,31 +81,24 @@ namespace PocketMall.Controllers
                 TempData.Keep();
                 var serealizeOrderProductsList = JsonSerializer.Serialize(OrderProductsList);
                 HttpContext.Session.SetString("OrderProductsList", serealizeOrderProductsList);
-                _hubContext.Clients.Users(userId).SendAsync("AddedToCart", $"{product.Name} Added To Cart");
+                await _hubContext.Clients.Users(userId).SendAsync("AddedToCart", $"{product.Name} Added To Cart");
                 Thread.Sleep(3000);
                 return RedirectToAction("GetAllProducts", "Product");
             }
         }
         public IActionResult ViewCart()
         {
-            var sess = HttpContext.Session.Keys.Where(x => x == "OrderProductsList").FirstOrDefault();
-            if (sess != null)
-            {
-                OrderProductsList = JsonSerializer.Deserialize<List<Product>>(HttpContext.Session.GetString(sess));
-                return View(OrderProductsList);
-
-            }
-            return View();
+            return ViewComponent("CartList");
         }
-        public async Task<IActionResult> RemoveFromCart(Guid productId)
+        public IActionResult RemoveFromCart(Guid productId)
         {
             var sess = HttpContext.Session.Keys.Where(x => x == "OrderProductsList").FirstOrDefault();
             if (sess != null)
             {
                 OrderProductsList = JsonSerializer.Deserialize<List<Product>>(HttpContext.Session.GetString(sess));
-                foreach(var product in OrderProductsList.ToList())
+                foreach (var product in OrderProductsList.ToList())
                 {
-                    if(product.ProductId == productId)
+                    if (product.ProductId == productId)
                     {
                         OrderProductsList.Remove(product);
                         break;
@@ -110,7 +107,22 @@ namespace PocketMall.Controllers
                 var serealizeOrderProductsList = JsonSerializer.Serialize(OrderProductsList);
                 HttpContext.Session.SetString("OrderProductsList", serealizeOrderProductsList);
             }
-            return RedirectToAction("ViewCart");
+            return ViewComponent("CartList");
+        }
+        public IActionResult Checkout()
+        {
+            return View();
         }
     }
 }
+
+/* var tempProductId = TempData["ProductId"];
+ var productId = (Guid)tempProductId;
+ orderModel.OrderId = Guid.NewGuid();
+ await _orderRepo.AddAsync(orderModel);
+ var productModel = await _productRepo.GetByIdAsync(productId);
+ //Now add to OrderProduct Table
+ var orderProduct = new OrderProduct { Order = orderModel, Product = productModel };
+ await _orderProductRepo.AddAsync(orderProduct);
+ await _hubContext.Clients.All.SendAsync("OrderPlaced", $"Order Id " + orderModel.OrderId + " Has Been Placed");
+ Thread.Sleep(2000);*/

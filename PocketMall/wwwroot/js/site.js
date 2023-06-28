@@ -8,7 +8,7 @@ connection.start().then(() => { }).catch((error) => {
 
 
 var notifier = new AWN();
-connection.on("ProductAdded", (order) => {
+connection.on("OrderPlaced", (order) => {
     console.log(order);
     notifier.success(order)
 });
@@ -17,3 +17,4 @@ connection.on("AddedToCart", (order) => {
     console.log(order);
     notifier.success(order)
 });
+
